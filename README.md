@@ -1,8 +1,8 @@
 # api-testing
 
-API test suite built with **Python + pytest + requests**, validating REST
-endpoints of the [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/),
-used here as a target application for test automation practice.
+API test suite built with **pytest + requests**, validating REST endpoints
+of the [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/), used
+here as a target application for test automation practice.
 
 ## Stack
 
@@ -16,11 +16,30 @@ used here as a target application for test automation practice.
 api-testing/
 ├── requirements.txt
 ├── pytest.ini
-├── conftest.py
 └── tests/
+    ├── conftest.py
     ├── test_products_api.py
-    └── test_user_api.py
+    ├── test_login_api.py
+    └── test_registration_api.py
 ```
+
+## Covered scenarios
+
+**Products**
+- Listing products returns results
+- Searching products by term
+- Fetching a single product by id
+- Fetching a non-existent product returns 404
+
+**Login**
+- Invalid credentials are rejected with 401
+- Missing request body returns an error
+- Error responses don't leak internal stack traces
+
+**User registration**
+- A newly registered user can log in immediately after
+- Registration fails when password confirmation doesn't match
+- Registration fails for a duplicate email
 
 ## Running locally
 
@@ -40,21 +59,12 @@ BASE_URL=http://localhost:3001 pytest
 This repository is consumed by the
 [docker-test-env](https://github.com/acorvello/docker-test-env)
 orchestration project, which spins up Juice Shop and runs this suite
-inside a lightweight Python container, triggered by a Jenkins pipeline.
-See that project's `docker-compose.yml` for the full setup.
-
-## Covered scenarios
-
-- Product listing returns data with the expected fields
-- Product search returns matching results, and an empty list for
-  non-matching queries
-- New user registration succeeds and returns the created user
-- A newly registered user can log in and receives an auth token
-- Login with invalid credentials returns `401`
-- Registration with mismatched passwords is rejected
+inside a lightweight Python container image, triggered by a Jenkins
+pipeline alongside the Cypress and Playwright suites. See that project's
+`docker-compose.yml` for the full setup.
 
 ## Next steps
 
-- Cover basket/cart endpoints (add item, view basket, checkout)
-- Add schema validation (e.g. with `jsonschema` or `pydantic`)
-- Negative tests for malformed payloads and injection attempts
+- Add schema validation for response payloads
+- Cover basket/cart endpoints
+- Add authenticated requests using the token from the login endpoint

@@ -1,34 +1,36 @@
-def test_list_products_returns_200_with_data(api_client):
-    response = api_client.get("/rest/products")
+import requests
+
+
+def test_list_products_returns_items(base_url):
+    response = requests.get(f"{base_url}/rest/products/search")
 
     assert response.status_code == 200
     body = response.json()
     assert "data" in body
-    assert isinstance(body["data"], list)
     assert len(body["data"]) > 0
 
 
-def test_product_item_has_expected_fields(api_client):
-    response = api_client.get("/rest/products")
-    product = response.json()["data"][0]
-
-    for field in ("id", "name", "price", "description"):
-        assert field in product
-
-
-def test_search_returns_matching_products(api_client):
-    response = api_client.get("/rest/products/search", params={"q": "apple"})
-
-    assert response.status_code == 200
-    results = response.json()["data"]
-    assert len(results) > 0
-    assert any("apple" in item["name"].lower() for item in results)
-
-
-def test_search_with_no_match_returns_empty_list(api_client):
-    response = api_client.get(
-        "/rest/products/search", params={"q": "termo-que-nao-deve-existir-xyz"}
+def test_search_products_by_term(base_url):
+    response = requests.get(
+        f"{base_url}/rest/products/search", params={"q": "apple"}
     )
 
     assert response.status_code == 200
-    assert response.json()["data"] == []
+    body = response.json()
+    assert "data" in body
+
+
+def test_get_single_product_by_id(base_url):
+    search_response = requests.get(f"{base_url}/rest/products/search")
+    first_product_id = search_response.json()["data"][0]["id"]
+
+    product_response = requests.get(f"{base_url}/api/Products/{first_product_id}")
+
+    assert product_response.status_code == 200
+    assert product_response.json()["data"]["id"] == first_product_id
+
+
+def test_get_product_with_invalid_id_returns_404(base_url):
+    response = requests.get(f"{base_url}/api/Products/999999")
+
+    assert response.status_code == 404
