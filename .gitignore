@@ -3,5 +3,6 @@ __pycache__/
 .venv/
 venv/
 report.html
+results/
 .pytest_cache/
 .env

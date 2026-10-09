@@ -68,3 +68,7 @@ pipeline alongside the Cypress and Playwright suites. See that project's
 - Add schema validation for response payloads
 - Cover basket/cart endpoints
 - Add authenticated requests using the token from the login endpoint
+
+## ⚖️ License
+
+This repository is licensed under the **MIT License**. Feel free to clone, study, modify, and distribute the code for educational or portfolio purposes.
