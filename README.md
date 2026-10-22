@@ -14,6 +14,7 @@ This repository hosts a production-grade automated API testing suite designed to
 - **HTTP Client:** `requests` (Session management and connection pooling)
 
 ## 📁 Project Structure
+```
 api-testing/
 ├── requirements.txt
 ├── pytest.ini
@@ -22,7 +23,7 @@ api-testing/
 ├── test_products_api.py
 ├── test_login_api.py
 └── test_registration_api.py
-
+```
 ## 🔍 Covered Scenarios
 
 **Products**
