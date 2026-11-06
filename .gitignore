@@ -7,3 +7,6 @@ results/
 .pytest_cache/
 .env
 .scannerwork/
+
+#backup files
+*.bkp
